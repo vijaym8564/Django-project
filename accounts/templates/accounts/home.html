@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #fff;
+            margin: 10px auto;
+            padding: 10px 20px;
+            width: 300px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        li:hover {
+            background-color: #dff6ff;
+        }
+    </style>
+</head>
+<body>
+    {% if user.is_authenticated %}
+        <h2>Welcome, {{ user.username }} 👋</h2>
+        <p>Here are some popular DevOps tools:</p>
+
+        <ul>
+            {% for tool in devops_tools %}
+                <li>{{ tool }}</li>
+            {% endfor %}
+        </ul>
+
+        <p><a href="/logout/">Logout</a></p>
+
+    {% else %}
+        <h2>Welcome, Guest!</h2>
+        <p><a href="/login/">Login</a> or <a href="/signup/">Sign up</a> to see DevOps tools.</p>
+    {% endif %}
+
+    {% for message in messages %}
+        <p style="color: green;">{{ message }}</p>
+    {% endfor %}
+</body>
+</html>

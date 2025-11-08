@@ -1,27 +1,22 @@
-# Step 1: Use official Python image
+# Step 1: Use a Python base image
 FROM python:3.10-slim
 
-# Step 2: Set working directory
-WORKDIR /app
-
-# Step 3: Install required system dependencies
+# Step 2: Install system dependencies
 RUN apt-get update && apt-get install -y \
+    build-essential \
     default-libmysqlclient-dev \
     pkg-config \
-    gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Step 4: Copy dependency file and install Python libs
+# Step 3: Copy requirements first for caching
 COPY requirements.txt .
-RUN pip install --upgrade pip
+
+# Step 4: Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Step 5: Copy project code
+# Step 5: Copy the rest of your project files
 COPY . .
 
-# Step 6: Expose Django port
-EXPOSE 8000
-
-# Step 7: Start Django app
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Step 6: Default command
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
 
